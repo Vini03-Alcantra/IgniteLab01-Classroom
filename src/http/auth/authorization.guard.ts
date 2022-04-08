@@ -5,6 +5,7 @@ import {expressJwtSecret} from 'jwks-rsa'
 import { promisify } from 'node:util';
 import { ConfigService } from '@nestjs/config';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { response } from 'express';
 
 @Injectable()
 export class AuthorizationGuard implements CanActivate {
@@ -35,7 +36,7 @@ export class AuthorizationGuard implements CanActivate {
 
     try {
       await checkJWT(req, res)
-
+      
       return true
     } catch (err) {
       throw new UnauthorizedException(err)
