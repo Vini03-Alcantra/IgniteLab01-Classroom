@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,6 +9,8 @@ datasource db {
 
 model Student {
   id String @id @default(uuid())
+
+  authUserID String? @unique
 
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now()) @updatedAt
