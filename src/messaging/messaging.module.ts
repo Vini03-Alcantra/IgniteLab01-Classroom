@@ -1,7 +1,13 @@
 import { Module } from '@nestjs/common';
+import { DatabaseModule } from 'src/database/database.module';
+import { CoursesService } from 'src/services/courses.service';
+import { EnrollementService } from 'src/services/enrollements.service';
+import { StudentsService } from 'src/services/students.service';
 import {PurchaseController} from "./controllers/purchases.controller"
 
 @Module({
-    controllers: [PurchaseController]
+    imports: [DatabaseModule],
+    controllers: [PurchaseController],
+    providers: [StudentsService, CoursesService, EnrollementService]
 })
 export class MessagingModule {}

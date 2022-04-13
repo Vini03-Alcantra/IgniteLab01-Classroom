@@ -1,5 +1,8 @@
 import { Controller } from "@nestjs/common";
 import { EventPattern, Payload } from "@nestjs/microservices";
+import { CoursesService } from "src/services/courses.service";
+import { EnrollementService } from "src/services/enrollements.service";
+import { StudentsService } from "src/services/students.service";
 
 export interface Customer {
     authUserId: string;
@@ -18,9 +21,37 @@ export interface PurchaseCreatedPayload {
 
 @Controller()
 export class PurchaseController {
+    constructor(
+        private studentsService: StudentsService,
+        private coursesServices: CoursesService,
+        private enrollmentsService: EnrollementService
+    ) {}
 
     @EventPattern('purchases.new-purchase')
     async purchaseCreated(@Payload('value') payload: PurchaseCreatedPayload){
-        console.log(payload)
+        let student = await this.studentsService.getStudentByID(
+            payload.customer.authUserId
+        )
+
+        if(!student){
+            student = await this.studentsService.createStudent({
+                authUserId: payload.customer.authUserId
+            })
+        }
+
+        let course = await this.coursesServices.getCourseBySlug(
+            payload.product.slug
+        );
+
+        if(!course){
+            course = await this.coursesServices.createCourse({
+                title: payload.product.title
+            })
+        }
+
+        await this.enrollmentsService.createEnrollment({
+            courseId: course.id,
+            studentId: student.id
+        })
     }
 }
