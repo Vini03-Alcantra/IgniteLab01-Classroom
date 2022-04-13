@@ -12,7 +12,7 @@ export class CoursesService {
 
     listAllCourses() {
         return this.prisma.course.findMany();
-    }s
+    }
 
     getCourseByID(id: string){
         return this.prisma.course.findUnique({

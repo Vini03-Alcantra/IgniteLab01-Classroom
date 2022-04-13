@@ -29,11 +29,13 @@ export class StudentsService {
         })
     }
 
-    createStudent({authUserId}: ICreateStudentParams){
-        return this.prisma.student.create({
+    async createStudent({authUserId}: ICreateStudentParams){
+        const studentCreated = await this.prisma.student.create({
             data: {
                 authUserID: authUserId
             }
         })
+
+        return studentCreated
     }
 }
